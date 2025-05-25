@@ -14,10 +14,12 @@ For example, if you want to replace a function that reads from a database, and t
     }
     ...
     #include <assert.h>
+    #include <stdio.h>
+    #include <stdlib.h>
     char mem[2500];
     void moc_error(void) { fprintf(stderr, "%s\n", moc_errmsg()); exit(1); }
     ...
-    void test_get_client_id_if_mysql_query_fails(void) {
+    void test_get_client_name_if_mysql_query_fails(void) {
       MYSQL con;
       const char *result;
       moc_init(mem, sizeof(mem));
@@ -34,6 +36,7 @@ For example, if you want to replace a function that reads from a database, and t
       /* 3. Then: Verify the response of the code */
       assert(result == NULL);
     }
+    ...
 
 In the first use of Mocito, for writing the mock function, you just send to Mocito the name of the function, its return type and the received parameters by using moc_act(), and then wait for a response. In the second use of mocito, after initializing the memory of the mocks, you send to Mocito the configuration of the mocks by using moc_given(), which gets the name of a function, a group of "matchers" and a group of "responders".
 
