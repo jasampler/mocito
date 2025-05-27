@@ -1438,51 +1438,51 @@ struct moc_matcher moc_ge(struct moc_value value) {
 	return moc_mparam(moc_cmpge, value);
 }
 
-struct moc_matcher moc_str_eq(char *str) {
+struct moc_matcher moc_eq_str(char *str) {
 	return moc_mparam(moc_cmpeqstr, moc_p_c(str));
 }
 
-struct moc_matcher moc_str_ne(char *str) {
+struct moc_matcher moc_ne_str(char *str) {
 	return moc_mparam(moc_cmpnestr, moc_p_c(str));
 }
 
-struct moc_matcher moc_str_lt(char *str) {
+struct moc_matcher moc_lt_str(char *str) {
 	return moc_mparam(moc_cmpltstr, moc_p_c(str));
 }
 
-struct moc_matcher moc_str_le(char *str) {
+struct moc_matcher moc_le_str(char *str) {
 	return moc_mparam(moc_cmplestr, moc_p_c(str));
 }
 
-struct moc_matcher moc_str_gt(char *str) {
+struct moc_matcher moc_gt_str(char *str) {
 	return moc_mparam(moc_cmpgtstr, moc_p_c(str));
 }
 
-struct moc_matcher moc_str_ge(char *str) {
+struct moc_matcher moc_ge_str(char *str) {
 	return moc_mparam(moc_cmpgestr, moc_p_c(str));
 }
 
-struct moc_matcher moc_cstr_eq(const char *str) {
+struct moc_matcher moc_eq_cstr(const char *str) {
 	return moc_mparam(moc_cmpeqstr, moc_cp_c(str));
 }
 
-struct moc_matcher moc_cstr_ne(const char *str) {
+struct moc_matcher moc_ne_cstr(const char *str) {
 	return moc_mparam(moc_cmpnestr, moc_cp_c(str));
 }
 
-struct moc_matcher moc_cstr_lt(const char *str) {
+struct moc_matcher moc_lt_cstr(const char *str) {
 	return moc_mparam(moc_cmpltstr, moc_cp_c(str));
 }
 
-struct moc_matcher moc_cstr_le(const char *str) {
+struct moc_matcher moc_le_cstr(const char *str) {
 	return moc_mparam(moc_cmplestr, moc_cp_c(str));
 }
 
-struct moc_matcher moc_cstr_gt(const char *str) {
+struct moc_matcher moc_gt_cstr(const char *str) {
 	return moc_mparam(moc_cmpgtstr, moc_cp_c(str));
 }
 
-struct moc_matcher moc_cstr_ge(const char *str) {
+struct moc_matcher moc_ge_cstr(const char *str) {
 	return moc_mparam(moc_cmpgestr, moc_cp_c(str));
 }
 

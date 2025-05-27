@@ -263,19 +263,19 @@ struct moc_matcher moc_le(struct moc_value value);
 struct moc_matcher moc_gt(struct moc_value value);
 struct moc_matcher moc_ge(struct moc_value value);
 
-struct moc_matcher moc_str_eq(char *str);
-struct moc_matcher moc_str_ne(char *str);
-struct moc_matcher moc_str_lt(char *str);
-struct moc_matcher moc_str_le(char *str);
-struct moc_matcher moc_str_gt(char *str);
-struct moc_matcher moc_str_ge(char *str);
+struct moc_matcher moc_eq_str(char *str);
+struct moc_matcher moc_ne_str(char *str);
+struct moc_matcher moc_lt_str(char *str);
+struct moc_matcher moc_le_str(char *str);
+struct moc_matcher moc_gt_str(char *str);
+struct moc_matcher moc_ge_str(char *str);
 
-struct moc_matcher moc_cstr_eq(const char *str);
-struct moc_matcher moc_cstr_ne(const char *str);
-struct moc_matcher moc_cstr_lt(const char *str);
-struct moc_matcher moc_cstr_le(const char *str);
-struct moc_matcher moc_cstr_gt(const char *str);
-struct moc_matcher moc_cstr_ge(const char *str);
+struct moc_matcher moc_eq_cstr(const char *str);
+struct moc_matcher moc_ne_cstr(const char *str);
+struct moc_matcher moc_lt_cstr(const char *str);
+struct moc_matcher moc_le_cstr(const char *str);
+struct moc_matcher moc_gt_cstr(const char *str);
+struct moc_matcher moc_ge_cstr(const char *str);
 
 struct moc_matcher moc_substr(char *str);
 struct moc_matcher moc_csubstr(const char *str);
