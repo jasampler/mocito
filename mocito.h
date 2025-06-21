@@ -31,6 +31,12 @@
 void moc_init(char *memblk, unsigned long size);
 
 /**
+ * Used for debugging Mocito, returns an array in static memory having
+ * the internal memory counters in pairs of maximum/used, ended with 0.
+ */
+const unsigned int *moc_memstats(void);
+
+/**
  * Function that must be defined by the user for managing mocking-related
  * errors and mantain them separated from those of the code to be tested.
  * Can be implemented as: fprintf(stderr, "%s\n", moc_errmsg()); exit(1);
@@ -220,6 +226,11 @@ const unsigned short *moc_get_cp_us(struct moc_value value);
 const unsigned int   *moc_get_cp_ui(struct moc_value value);
 const unsigned long  *moc_get_cp_ul(struct moc_value value);
 const moc_fnptr *moc_get_cp_fn(struct moc_value value);
+
+/**
+ * Returns the type of the given Mocito value.
+ */
+moc_type moc_get_type(struct moc_value value);
 
 /**
  * Call-related data to be used optionally by matchers or responders.

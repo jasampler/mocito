@@ -171,6 +171,22 @@ struct moc_context {
 
 static struct moc_context moc_ctx;
 
+const unsigned int *moc_memstats(void) {
+	static unsigned int stats[11];
+	stats[0] = moc_ctx.maxfuncs;
+	stats[1] = moc_ctx.nfuncs;
+	stats[2] = moc_ctx.maxmaps;
+	stats[3] = moc_ctx.nmaps;
+	stats[4] = moc_ctx.maxmatcs;
+	stats[5] = moc_ctx.nmatcs;
+	stats[6] = moc_ctx.maxresps;
+	stats[7] = moc_ctx.nresps;
+	stats[8] = moc_ctx.maxlnods;
+	stats[9] = moc_ctx.nlnods;
+	stats[10] = 0;
+	return stats;
+}
+
 /* The type of a value is defined by a standard (and a pointer) type. */
 enum moc_stdtype {
 	MOC_VOID, MOC_CHR, MOC_SHR, MOC_INT, MOC_LNG, MOC_FLT, MOC_DBL,
@@ -1119,6 +1135,10 @@ const unsigned long  *moc_get_cp_ul(struct moc_value value) {
 
 const moc_fnptr *moc_get_cp_fn(struct moc_value value) {
 	return *((const moc_fnptr **) MOC_VALDATA(value));
+}
+
+moc_type moc_get_type(struct moc_value value) {
+	return MOC_IVAL(&value)->type;
 }
 
 #define MOC_GET_C(value)  (*(char *)   MOC_VALDATA(value))
@@ -2161,12 +2181,12 @@ static void moc_given_nnn(const char *funcname, MOC_NUM_T nmatchers,
 				continue;
 			}
 			for (m = 0; m < nmatchers + nxmatchers; m++) {
-				if (moc_matchers_eq(map->matchers + m,
+				if (! moc_matchers_eq(map->matchers + m,
 						matchers + m)) {
-					break; /* mapping node found */
+					break; /* not found */
 				}
 			}
-			if (m < nmatchers + nxmatchers) {
+			if (m == nmatchers + nxmatchers) {
 				break; /* mapping node found */
 			}
 			mnode = mnode->next;
