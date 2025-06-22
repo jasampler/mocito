@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* Create the default function to manage the mocking-related errors. */
 void moc_error(void) { fprintf(stderr, "%s\n", moc_errmsg()); exit(1); }
@@ -67,6 +68,48 @@ long lfun7(char c, short s, int i, long l, float f, double d, void *p) {
 			moc_values_7(moc_c(c), moc_s(s), moc_i(i),
 					moc_l(l), moc_f(f), moc_d(d),
 					moc_p(p))));
+}
+
+const char *strfun1(signed char sc) {
+	return moc_get_cp_c(moc_act(MOC_FN(strfun1), moc_type_cp_c(),
+			moc_values_1(moc_sc(sc))));
+}
+
+const char *strfun2(signed char sc, unsigned char uc) {
+	return moc_get_cp_c(moc_act(MOC_FN(strfun2), moc_type_cp_c(),
+			moc_values_2(moc_sc(sc), moc_uc(uc))));
+}
+
+const char *strfun3(signed char sc, unsigned char uc,
+		unsigned short us) {
+	return moc_get_cp_c(moc_act(MOC_FN(strfun3), moc_type_cp_c(),
+			moc_values_3(moc_sc(sc), moc_uc(uc),
+					moc_us(us))));
+}
+
+const char *strfun4(signed char sc, unsigned char uc,
+		unsigned short us, unsigned int ui) {
+	return moc_get_cp_c(moc_act(MOC_FN(strfun4), moc_type_cp_c(),
+			moc_values_4(moc_sc(sc), moc_uc(uc),
+					moc_us(us), moc_ui(ui))));
+}
+
+const char *strfun5(signed char sc, unsigned char uc,
+		unsigned short us, unsigned int ui, unsigned long ul) {
+	return moc_get_cp_c(moc_act(MOC_FN(strfun5), moc_type_cp_c(),
+			moc_values_5(moc_sc(sc), moc_uc(uc),
+					moc_us(us), moc_ui(ui),
+					moc_ul(ul))));
+}
+
+const char *strfun6(signed char sc, unsigned char uc,
+		unsigned short us, unsigned int ui, unsigned long ul,
+		int (*cmp)(const void *, const void *)) {
+	return moc_get_cp_c(moc_act(MOC_FN(strfun6), moc_type_cp_c(),
+			moc_values_6(moc_sc(sc), moc_uc(uc),
+					moc_us(us), moc_ui(ui),
+					moc_ul(ul),
+					moc_fn(MOC_FP(cmp)))));
 }
 
 void test_any(void) {
@@ -133,6 +176,66 @@ void test_any(void) {
 	assert(7L == lfun7('n',22,-190,8888L,6.7,-400.004,&m));
 }
 
+int cmpint(const void *pi1, const void *pi2) {
+	return (*(int *)pi1) - (*(int *)pi2);
+}
+
+int cmplong(const void *pl1, const void *pl2) {
+	return (*(long *)pl1) - (*(long *)pl2);
+}
+
+void test_any_extended(void) {
+	char mem[5000];
+
+	moc_init(mem, sizeof(mem));
+	moc_given(MOC_FN(strfun1),
+			moc_match_1(moc_any()),
+			moc_respond_1(moc_return(moc_cp_c("X1"))));
+	moc_given(MOC_FN(strfun2),
+			moc_match_2(moc_any(),
+				moc_any()),
+			moc_respond_1(moc_return(moc_cp_c("X2"))));
+	moc_given(MOC_FN(strfun3),
+			moc_match_3(moc_any(),
+				moc_any(),
+				moc_any()),
+			moc_respond_1(moc_return(moc_cp_c("X3"))));
+	moc_given(MOC_FN(strfun4),
+			moc_match_4(moc_any(),
+				moc_any(),
+				moc_any(),
+				moc_any()),
+			moc_respond_1(moc_return(moc_cp_c("X4"))));
+	moc_given(MOC_FN(strfun5),
+			moc_match_5(moc_any(),
+				moc_any(),
+				moc_any(),
+				moc_any(),
+				moc_any()),
+			moc_respond_1(moc_return(moc_cp_c("X5"))));
+	moc_given(MOC_FN(strfun6),
+			moc_match_6(moc_any(),
+				moc_any(),
+				moc_any(),
+				moc_any(),
+				moc_any(),
+				moc_any()),
+			moc_respond_1(moc_return(moc_cp_c("X6"))));
+
+	assert(strcmp(strfun1(-10), "X1") == 0);
+	assert(strcmp(strfun1(-11), "X1") == 0);
+	assert(strcmp(strfun2(-12,0), "X2") == 0);
+	assert(strcmp(strfun2(-13,1), "X2") == 0);
+	assert(strcmp(strfun3(-14,2,11), "X3") == 0);
+	assert(strcmp(strfun3(-15,3,22), "X3") == 0);
+	assert(strcmp(strfun4(-16,4,33,111), "X4") == 0);
+	assert(strcmp(strfun4(-17,5,44,222), "X4") == 0);
+	assert(strcmp(strfun5(-18,6,55,333,1111L), "X5") == 0);
+	assert(strcmp(strfun5(-19,7,66,444,2222L), "X5") == 0);
+	assert(strcmp(strfun6(-20,8,77,555,3333L,cmpint), "X6") == 0);
+	assert(strcmp(strfun6(-21,9,88,666,4444L,cmplong), "X6") == 0);
+}
+
 void test_any_type(void) {
 	int n, m;
 	char mem[5000];
@@ -195,6 +298,58 @@ void test_any_type(void) {
 	assert(-6L == lfun6('l',20,-170,6666L,4.5,-200.002));
 	assert(-7L == lfun7('m',21,-180,7777L,5.6,-300.003,&n));
 	assert(-7L == lfun7('n',22,-190,8888L,6.7,-400.004,&m));
+}
+
+void test_any_type_extended(void) {
+	char mem[5000];
+
+	moc_init(mem, sizeof(mem));
+	moc_given(MOC_FN(strfun1),
+			moc_match_1(moc_any_sc()),
+			moc_respond_1(moc_return(moc_cp_c("Y1"))));
+	moc_given(MOC_FN(strfun2),
+			moc_match_2(moc_any_sc(),
+				moc_any_uc()),
+			moc_respond_1(moc_return(moc_cp_c("Y2"))));
+	moc_given(MOC_FN(strfun3),
+			moc_match_3(moc_any_sc(),
+				moc_any_uc(),
+				moc_any_us()),
+			moc_respond_1(moc_return(moc_cp_c("Y3"))));
+	moc_given(MOC_FN(strfun4),
+			moc_match_4(moc_any_sc(),
+				moc_any_uc(),
+				moc_any_us(),
+				moc_any_ui()),
+			moc_respond_1(moc_return(moc_cp_c("Y4"))));
+	moc_given(MOC_FN(strfun5),
+			moc_match_5(moc_any_sc(),
+				moc_any_uc(),
+				moc_any_us(),
+				moc_any_ui(),
+				moc_any_ul()),
+			moc_respond_1(moc_return(moc_cp_c("Y5"))));
+	moc_given(MOC_FN(strfun6),
+			moc_match_6(moc_any_sc(),
+				moc_any_uc(),
+				moc_any_us(),
+				moc_any_ui(),
+				moc_any_ul(),
+				moc_any_fn()),
+			moc_respond_1(moc_return(moc_cp_c("Y6"))));
+
+	assert(strcmp(strfun1(-10), "Y1") == 0);
+	assert(strcmp(strfun1(-11), "Y1") == 0);
+	assert(strcmp(strfun2(-12,0), "Y2") == 0);
+	assert(strcmp(strfun2(-13,1), "Y2") == 0);
+	assert(strcmp(strfun3(-14,2,11), "Y3") == 0);
+	assert(strcmp(strfun3(-15,3,22), "Y3") == 0);
+	assert(strcmp(strfun4(-16,4,33,111), "Y4") == 0);
+	assert(strcmp(strfun4(-17,5,44,222), "Y4") == 0);
+	assert(strcmp(strfun5(-18,6,55,333,1111L), "Y5") == 0);
+	assert(strcmp(strfun5(-19,7,66,444,2222L), "Y5") == 0);
+	assert(strcmp(strfun6(-20,8,77,555,3333L,cmpint), "Y6") == 0);
+	assert(strcmp(strfun6(-21,9,88,666,4444L,cmplong), "Y6") == 0);
 }
 
 void test_any_cascade(void) {
@@ -343,6 +498,7 @@ void test_any_type_cascade(void) {
 
 int main(void) {
 	test_any();
+	test_any_extended();
 	test_any_type();
 	test_any_cascade();
 	test_any_type_cascade();
