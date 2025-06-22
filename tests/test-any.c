@@ -500,6 +500,7 @@ int main(void) {
 	test_any();
 	test_any_extended();
 	test_any_type();
+	test_any_type_extended();
 	test_any_cascade();
 	test_any_type_cascade();
 	return 0;
